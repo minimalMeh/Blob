@@ -17,7 +17,6 @@ fakeInput.addEventListener("change", () => {
 });
 
 //Drag events
-
 const preventDefaultBehaviors = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -49,9 +48,49 @@ dropRegion.addEventListener("drop", handleDrop, false);
 
 const handleFiles = (files) => {
     for ( let i = 0; i < files.length; i++) {
-        if (validateImage(files[i])) {
-            previewAndUploadImage(files[i]);
-        }
+        previewAndUploadImage(files[i]);
     }
 }
 
+const uploadImageFromUrl = (url) => {
+    const img = new Image();
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+
+    img.onload.bind(img) = () => {
+        canvas.width = this.naturalWidth;
+        canvas.height = this.naturalHeight;
+        context.drawImage(this, 0, 0);
+        canvas.toBlob((blob) => {
+            handleFiles([blob]);
+        }, "image/png")
+    };
+    img.onerror = () => {
+        alert("Error in uploading");
+    };
+    img.crossOrigin = "";
+    img.src = url;
+}
+
+const previewImage = (img) => {
+    //container
+    const imgView = document.createElement("div");
+    imgView.className = "image-view";
+    imagePreviewRegion.appendChild(imgView);
+
+    //preview image
+    const image = document.createElement("img");
+    imgView.appendChild(image);
+
+    //progress overlay
+    const overlay = document.createElement("div");
+    overlay.className = "overlay";
+    imgView.appendChild(overlay);
+
+    //read image
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        image.src = e.target.result;
+    }
+    reader.readAsDataURL(img); // can be replaced as URL.createObjectURL();
+}
