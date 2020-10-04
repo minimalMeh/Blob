@@ -48,7 +48,7 @@ dropRegion.addEventListener("drop", handleDrop, false);
 
 const handleFiles = (files) => {
     for ( let i = 0; i < files.length; i++) {
-        previewAndUploadImage(files[i]);
+        previewImage(files[i]);
     }
 }
 
@@ -57,10 +57,10 @@ const uploadImageFromUrl = (url) => {
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
 
-    img.onload.bind(img) = () => {
-        canvas.width = this.naturalWidth;
-        canvas.height = this.naturalHeight;
-        context.drawImage(this, 0, 0);
+    img.onload = () => {
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        context.drawImage(img, 0, 0);
         canvas.toBlob((blob) => {
             handleFiles([blob]);
         }, "image/png")
